@@ -1,0 +1,22 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: wordpress-hpa
+  namespace: wordpress-namespace
+  labels:
+    app: wordpress
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: wordpress  # WordPress deployment ko target kar raha hai
+  minReplicas: 1  # Minimum replicas (pods) ki value
+  maxReplicas: 5  # Maximum replicas (pods) ki value
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu  # CPU usage par scaling ka base
+        target:
+          type: Utilization
+          averageUtilization: 50  # Agar CPU utilization 50% se zyada ho to scale up
+

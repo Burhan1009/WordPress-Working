@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  namespace: wordpress-namespace
+  labels:
+    app: wordpress
+spec:
+  replicas: 1  # One replica of WordPress pod
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress:latest  # WordPress ka official image
+        ports:
+        - containerPort: 80  # Expose WordPress on port 80
+        envFrom:
+        - configMapRef:
+            name: wordpress-configmap  # WordPress environment variables from the ConfigMap
+        volumeMounts:
+        - name: wordpress-persistent-storage
+          mountPath: /var/www/html  # WordPress data ko yahan mount kiya jayega
+      volumes:
+      - name: wordpress-persistent-storage
+        persistentVolumeClaim:
+          claimName: wordpress-pvc  # PVC reference to link persistent

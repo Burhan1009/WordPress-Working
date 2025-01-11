@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-configmap
+  namespace: wordpress-namespace
+  labels:
+    app: mysql
+data:
+  MYSQL_ROOT_PASSWORD: "root_password"        # Replace with your root password
+  MYSQL_DATABASE: "wordpress"              # Replace with your MySQL database name
+  MYSQL_USER: "wordpress"                          # Replace with your MySQL username
+  MYSQL_PASSWORD: "wordpress"             # Replace with your MySQL user password
+

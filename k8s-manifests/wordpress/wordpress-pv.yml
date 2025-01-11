@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wordpress-pv
+  namespace: wordpress-namespace
+  labels:
+    app: wordpress
+spec:
+  capacity:
+    storage: 2Gi  # Define the storage capacity for WordPress
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce  # WordPress ko single pod ke liye mount karne ki access mode
+  persistentVolumeReclaimPolicy: Retain  # PV ko retain karein jab PVC delete ho
+  storageClassName: manual  # Storage class jo cluster ke storage configuration ko match karta ho
+  hostPath:
+    path: /mnt/data/wordpress  # Local disk path on the node for WordPress storage
+    type: DirectoryOrCreate
+

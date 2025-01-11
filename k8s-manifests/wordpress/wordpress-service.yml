@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+  namespace: wordpress-namespace
+  labels:
+    app: wordpress
+spec:
+  selector:
+    app: wordpress  # Service ko WordPress ke pods ko select karne ke liye label match karna hoga
+  ports:
+    - protocol: TCP
+      port: 80  # Service ko cluster ke andar port 80 par expose karna
+      targetPort: 80  # Container ka port jahan WordPress running hai
+      nodePort: 30080  # Node ke external port jahan WordPress accessible hoga
+  type: NodePort  # Service ko external access dene ke liye NodePort type
+

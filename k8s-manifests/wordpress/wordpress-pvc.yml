@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wordpress-pvc
+  namespace: wordpress-namespace
+  labels:
+    app: wordpress
+spec:
+  accessModes:
+    - ReadWriteOnce  # WordPress ko ek pod ke liye read-write access
+  resources:
+    requests:
+      storage: 2Gi  # Storage size requested for WordPress
+  volumeMode: Filesystem
+  storageClassName: manual  # Must match with PV storage class
+  volumeName: wordpress-pv  # Link the PVC to the specific PV
+
