@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+  namespace: wordpress-namespace
+  labels:
+    app: mysql
+spec:
+  selector:
+    app: mysql  # Ensure this matches the label in the StatefulSet or Pod
+  ports:
+    - protocol: TCP
+      port: 3306         # Exposing MySQL port on the service
+      targetPort: 3306    # Port inside the container to connect to MySQL
