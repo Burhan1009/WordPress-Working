@@ -1,0 +1,69 @@
+burhan@Hensex:~/WordPress/k8s-manifests$ tree
+.
+├── mysql
+│   ├── mysql-configmap.yml
+│   ├── mysql-pv.yml
+│   ├── mysql-pvc.yml
+│   ├── mysql-secret.yml
+│   ├── mysql-service.yml
+│   ├── mysql-statefulset.yml
+│   └── namespace.yml
+└── wordpress
+    ├── wordpress-configmap.yml
+    ├── wordpress-deployment.yml
+    ├── wordpress-hpa.yml
+    ├── wordpress-ingress.yml
+    ├── wordpress-pv.yml
+    ├── wordpress-pvc.yml
+    └── wordpress-service.yml
+
+2 directories, 14 files
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f mysql/mysql-pv.yml
+persistentvolume/mysql-pv created
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f mysql/mysql-pvc.yml
+persistentvolumeclaim/mysql-pvc created
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f mysql/mysql-se.yml
+mysql-secret.yml   mysql-service.yml
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f mysql/mysql-secret.yml
+secret/mysql-secret created
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f mysql/mysql-configmap.yml
+configmap/mysql-configmap created
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f mysql/mysql-statefulset.yml
+statefulset.apps/mysql created
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f mysql/mysql-service.yml
+service/mysql created
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f wordpress/wordpress-pv.yml
+persistentvolume/wordpress-pv created
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f wordpress/wordpress-pvc.yml
+persistentvolumeclaim/wordpress-pvc created
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f wordpress/wordpress-configmap.yml
+configmap/wordpress-configmap created
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f wordpress/wordpress-deployment.yml
+deployment.apps/wordpress created
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f wordpress/wordpress-service.yml
+service/wordpress created
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f wordpress/wordpress-hpa.yml
+horizontalpodautoscaler.autoscaling/wordpress-hpa created
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl apply -f wordpress/wordpress-ingress.yml
+ingress.networking.k8s.io/wordpress-ingress created
+burhan@Hensex:~/WordPress/k8s-manifests$ kubectl get all -n wordpress-namespace
+NAME                             READY   STATUS    RESTARTS   AGE
+pod/mysql-0                      1/1   Running   0          3m10s
+pod/wordpress-585d8fd97c-fmdnr   1/1   Running   0          106s
+
+NAME                TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)AGE
+service/mysql       ClusterIP   None         <none>        3306/TCP2m44s
+service/wordpress   NodePort    10.96.217.90   <none>        80:30080/TCP96s
+
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/wordpress   1/1     1           1           106s
+
+NAME DESIRED   CURRENT   READY   AGE
+replicaset.apps/wordpress-585d8fd97c 1         1         1       106s
+
+NAME                     READY   AGE
+statefulset.apps/mysql   1/1     3m10s
+
+NAME              REFERENCE              TARGETS              MINPODS   MAXPODS  REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/wordpress-hpa   Deployment/wordpress   cpu: <unknown>/50%   1         5  1          85s
+burhan@Hensex:~/WordPress/k8s-manifestburhan@Hensex:~/WordPress/k8s-manifests$
